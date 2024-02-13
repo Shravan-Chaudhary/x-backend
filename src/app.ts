@@ -2,6 +2,7 @@ import express, { Application } from "express";
 import { globalErrorHandler } from "./common/middlewares/globalErrorHandler";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
+import { User } from "./user";
 
 async function initServer(): Promise<Application> {
     const app = express();
@@ -9,14 +10,13 @@ async function initServer(): Promise<Application> {
 
     const graphqlServer = new ApolloServer({
         typeDefs: `
+            ${User.types}
             type Query {
-                hello: String
+                ${User.queries}
             }
         `,
         resolvers: {
-            Query: {
-                hello: () => `Hello, from GraphQL!`,
-            },
+            Query: { ...User.resolvers.queries },
         },
     });
 
