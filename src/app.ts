@@ -5,27 +5,27 @@ import { expressMiddleware } from "@apollo/server/express4";
 import { User } from "./user";
 
 async function initServer(): Promise<Application> {
-    const app = express();
-    app.use(express.json());
+  const app = express();
+  app.use(express.json());
 
-    const graphqlServer = new ApolloServer({
-        typeDefs: `
+  const graphqlServer = new ApolloServer({
+    typeDefs: `
             ${User.types}
             type Query {
                 ${User.queries}
             }
         `,
-        resolvers: {
-            Query: { ...User.resolvers.queries },
-        },
-    });
+    resolvers: {
+      Query: { ...User.resolvers.queries },
+    },
+  });
 
-    await graphqlServer.start();
+  await graphqlServer.start();
 
-    app.use("/graphql", expressMiddleware(graphqlServer));
-    app.use(globalErrorHandler);
+  app.use("/graphql", expressMiddleware(graphqlServer));
+  app.use(globalErrorHandler);
 
-    return app;
+  return app;
 }
 
 export default initServer;
